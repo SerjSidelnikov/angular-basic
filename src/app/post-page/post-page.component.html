@@ -1,19 +1,22 @@
-<div class="post">
-  <div class="header">
-    <h1>Post title</h1>
+<div *ngIf="post$ | async as post; else loading">
+  <div class="post">
+    <div class="header">
+      <h1>{{post.title}}</h1>
 
-    <button routerLink="/" class="btn btn-link">На главную</button>
-  </div>
+      <button routerLink="/" class="btn btn-link">На главную</button>
+    </div>
 
-  <div class="info">
-    <strong>Имя автора</strong>
-    <small>06.05.2020</small>
-  </div>
+    <div class="info">
+      <strong>{{post.author}}</strong>
+      <small>{{post.date | date:'medium':null:'ru'}}</small>
+    </div>
 
-  <div>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, commodi cumque cupiditate deleniti dicta dolores enim, explicabo incidunt ipsa ipsum itaque laboriosam libero magni minima necessitatibus neque quo recusandae rem repellendus saepe unde veniam vero! Consequatur esse modi quam ratione recusandae, totam ut voluptatum? Dolorum est harum minus quos voluptas.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, commodi cumque cupiditate deleniti dicta dolores enim, explicabo incidunt ipsa ipsum itaque laboriosam libero magni minima necessitatibus neque quo recusandae rem repellendus saepe unde veniam vero! Consequatur esse modi quam ratione recusandae, totam ut voluptatum? Dolorum est harum minus quos voluptas.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, commodi cumque cupiditate deleniti dicta dolores enim, explicabo incidunt ipsa ipsum itaque laboriosam libero magni minima necessitatibus neque quo recusandae rem repellendus saepe unde veniam vero! Consequatur esse modi quam ratione recusandae, totam ut voluptatum? Dolorum est harum minus quos voluptas.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, commodi cumque cupiditate deleniti dicta dolores enim, explicabo incidunt ipsa ipsum itaque laboriosam libero magni minima necessitatibus neque quo recusandae rem repellendus saepe unde veniam vero! Consequatur esse modi quam ratione recusandae, totam ut voluptatum? Dolorum est harum minus quos voluptas.</p>
+    <div>
+      <quill-view-html [content]="post.text"></quill-view-html>
+    </div>
   </div>
 </div>
+
+<ng-template #loading>
+  <p class="text-center">Загрузка...</p>
+</ng-template>
