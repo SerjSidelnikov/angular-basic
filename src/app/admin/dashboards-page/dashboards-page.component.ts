@@ -3,6 +3,7 @@ import {Subscription} from 'rxjs';
 
 import {Post} from '../../shared/interfaces';
 import {PostsService} from '../../shared/posts.service';
+import {AlertService} from '../shared/services/alert.service';
 
 @Component({
   selector: 'app-dashboards-page',
@@ -16,7 +17,10 @@ export class DashboardsPageComponent implements OnInit, OnDestroy {
   dSub: Subscription;
   searchPost = '';
 
-  constructor(private postsService: PostsService) { }
+  constructor(
+    private postsService: PostsService,
+    private alert: AlertService
+  ) {}
 
   ngOnInit(): void {
     this.pSub = this.postsService.getAll().subscribe(posts => {
@@ -37,6 +41,7 @@ export class DashboardsPageComponent implements OnInit, OnDestroy {
   remove(id: string) {
     this.dSub = this.postsService.remove(id).subscribe(() => {
       this.posts = this.posts.filter(post => post.id !== id);
+      this.alert.danger('Пост был удалён');
     });
   }
 }
