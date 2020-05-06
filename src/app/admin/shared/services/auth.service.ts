@@ -12,14 +12,28 @@ export class AuthService {
   }
 
   get token(): string {
-    return '';
+    const expDate = new Date(localStorage.getItem('fb-token-exp'));
+
+    if (new Date() > expDate) {
+      this.logout();
+      return null;
+    }
+
+    return localStorage.getItem('fb-token');
   }
 
-  private setToken(res: FbAuthResponse) {
-    console.log(res);
+  private setToken(res: FbAuthResponse | null) {
+    if (res) {
+      const extDate = new Date(new Date().getTime() + +res.expiresIn * 1000);
+      localStorage.setItem('fb-token', res.idToken);
+      localStorage.setItem('fb-token-exp', extDate.toString());
+    } else {
+      localStorage.clear();
+    }
   }
 
   login(user: User): Observable<any> {
+    user.returnSecureToken = true;
     return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.apiKey}`, user)
       .pipe(
         tap(this.setToken)
@@ -27,7 +41,7 @@ export class AuthService {
   }
 
   logout() {
-
+    this.setToken(null);
   }
 
   isAuthenticated(): boolean {
